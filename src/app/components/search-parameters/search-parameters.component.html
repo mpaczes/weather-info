@@ -1,0 +1,93 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <form #wetherSearchForm="ngForm" (ngSubmit)="checkWeather(wetherSearchForm.value)">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="apiKey">Api key</label>
+                            <input type="text" class="form-control" placeholder="Api key from https://home.openweathermap.org" #apiKey ngModel name="apiKey">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="stateName">State name</label>
+                            <input type="text" class="form-control" placeholder="State name" #stateName [(ngModel)]="stateCurrent" name="stateName" 
+                                [matAutocomplete]="stateAutoComplete" (ngModelChange)="doFilterState()">
+                            <mat-autocomplete #stateAutoComplete="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredStateOptions | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="cityName">City name</label>
+                            <input type="text" class="form-control" placeholder="City name" #cityName [(ngModel)]="cityCurrent" name="cityName"
+                                [matAutocomplete]="cityAutoComplete" (ngModelChange)="doFilterCity()">
+                            <mat-autocomplete #cityAutoComplete="matAutocomplete">
+                                <mat-option *ngFor="let option of filteredCityOptions | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-primary" (click)="setLatAndLong(apiKey.value, stateName.value, cityName.value)">Set latitude and longtitude</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" class="form-control lat-and-lon" placeholder="Latitude" #latitude [(ngModel)]="backendData.latitude" name="latitude" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="longtitude">Longtitude</label>
+                            <input type="text" class="form-control lat-and-lon" placeholder="Longtitude" #longtitude [(ngModel)]="backendData.longtitude" name="longtitude" readonly>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="weatherType" value="current-weather" #currentWeather [ngModel]="weatherTypeInit">
+                            <label class="form-check-label" for="currentWeather">Current weather</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="weatherType" value="weather-forecast" #weatherForecast [ngModel]="weatherTypeInit">
+                            <label class="form-check-label" for="weatherForecast">Weather forecast</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-primary" [disabled]="isCheckWeatherDisabled">Check weather</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-primary" (click)="clearBackendLogs()">Clear backend logs</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="logsFromBackend">Logs from backend</label>
+                            <textarea class="form-control lat-and-lon" #logsFromBackend rows="8" readonly [value]="logsFromBackendMessage"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

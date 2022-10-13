@@ -1,0 +1,53 @@
+.city-and-name {
+    font-weight: bold;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+}
+
+td.mat-cell {
+    white-space: nowrap;
+    border-style: none;
+}
+
+th.mat-header-cell {
+    white-space: nowrap;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+    background-color: darkcyan;
+    color: white;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: darkseagreen;
+}
+
+tr.mat-row {
+    height: 25px;
+}
+
+tr.mat-header-row {
+    height: 30px;
+}
+
+.location {
+    text-align: left;
+    font-weight: bold;
+}
+
+.mat-table-container {
+    max-width: 100%;
+    overflow: auto;
+}
+
+.mat-paginator-sticky {
+    bottom: 0px;
+    right: 0px;
+    position: fixed;
+    z-index: 10;
+}

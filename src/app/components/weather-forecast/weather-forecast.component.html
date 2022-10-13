@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-sm-6">
+      <mat-form-field appearance="standard">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Input text for search" #searchInput>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6 location">
+        {{ location }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+      <section class="mat-table-container mat-elevation-z8" tabindex="0">
+        <table mat-table [dataSource]="matTableDataSource" matSort>
+            <ng-container [matColumnDef]="col" *ngFor="let col of displayedColumns" 
+              [sticky]="isColumnSticky(col)">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{ headerNames.get(col) }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element[col] }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 15]" class="mat-paginator-sticky"></mat-paginator>
+      </section>
+    </div>
+</div>

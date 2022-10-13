@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-sm-4 city-and-name">
+       Location : {{ stateAndCityName }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <!-- weather description -->
+        <mat-card class="current-weather-card">
+            <mat-card-header class="mat-card-header-style">
+                <mat-card-title>Weather short description</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <ul>
+                    <li><span class="bold-text">{{ currentWeatgerData.weatherMain }}</span> - group of weather parameters (Rain, Snow, Extreme etc.)</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.weatherDescription }}</span> - weather condition within the group</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.weatherIcon }}</span> - weather icon id</li>
+                </ul>
+            </mat-card-content>
+            <mat-card-actions>
+                <!-- przyciski -->
+            </mat-card-actions>
+            <mat-card-footer>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+    <div class="col-sm-4">
+        <!-- temperature -->
+        <mat-card class="current-weather-card">
+            <mat-card-header class="mat-card-header-style">
+                <mat-card-title>Temperture information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <ul>
+                    <li><span class="bold-text">{{ currentWeatgerData.mainTemp }}</span> - temperature in Celsius</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.mainHumidity }}</span> - humidity, %</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.mainPressure }}</span> - atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.mainTempMin }}</span> - minimum temperature at the moment. This is minimal currently observed temperature (within large megalopolises and urban areas)</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.mainTempMax }}</span> - maximum temperature at the moment. This is maximal currently observed temperature (within large megalopolises and urban areas)</li>
+                    </ul>
+            </mat-card-content>
+            <mat-card-actions>
+                <!-- przyciski -->
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-sm-4">
+        <!-- wind -->
+        <mat-card class="current-weather-card">
+            <mat-card-header class="mat-card-header-style">
+                <mat-card-title>Wind information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <ul>
+                    <li><span class="bold-text">{{ currentWeatgerData.windSpeed }}</span> - wind speed. Unit Default: meter/sec</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.windDeg }}</span> - wind direction, degrees (meteorological)</li>
+                    <li><span class="bold-text">{{ currentWeatgerData.windGust }}</span> -  wind gust. Unit Default: meter/sec</li>
+                </ul>
+            </mat-card-content>
+            <mat-card-actions>
+                <!-- przyciski -->
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
