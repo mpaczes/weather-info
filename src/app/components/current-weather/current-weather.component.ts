@@ -5,6 +5,7 @@ import { BackendLogMessageHandlerService } from 'src/app/services/backend-log-me
 import { CurrentWeatherService } from 'src/app/services/current-weather.service';
 
 import moment from 'moment';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-current-weather',
@@ -61,6 +62,10 @@ export class CurrentWeatherComponent implements OnInit, OnChanges, OnDestroy {
 
             let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
             this.backendLogMessageHandlerService.generateMessage('RECEIVED - current weather data : ' + timestampOfData);
+        },
+        (error: HttpErrorResponse) => {
+          this.backendLogMessageHandlerService.generateMessage('ERROR (current weather) - ' + error.error.message + ', ' + error.message + ', ' + 
+            error.status + ', ' + error.statusText + ', ' + error.url);
         });
       }
     }

@@ -7,6 +7,7 @@ import { DirectGeocodingInterface } from 'src/app/models/direct-geocoding-interf
 import { DirectGeocodingService } from '../../services/direct-geocoding.service';
 import { EventEmitterInterface } from 'src/app/models/event-emitter-interface';
 import { BackendLogMessageHandlerService } from 'src/app/services/backend-log-message-handler.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-search-parameters',
@@ -64,6 +65,10 @@ export class SearchParametersComponent implements OnInit, OnDestroy {
         let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
 
         this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + 'RECEIVED - direct geocoding data : ' + timestampOfData);
+      },
+      (error: HttpErrorResponse) => {
+        this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + 'ERROR (search parameters) - ' + error.error.message + ', ' + error.message + ', ' + 
+          error.status + ', ' + error.statusText + ', ' + error.url);
       });
   }
 
