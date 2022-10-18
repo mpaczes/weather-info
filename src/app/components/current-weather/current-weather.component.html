@@ -13,9 +13,9 @@
             </mat-card-header>
             <mat-card-content>
                 <ul>
-                    <li><span class="bold-text">{{ currentWeatgerData.weatherMain }}</span> - group of weather parameters (Rain, Snow, Extreme etc.)</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.weatherDescription }}</span> - weather condition within the group</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.weatherIcon }}</span> - weather icon id</li>
+                    <li><span class="bold-text" id='weatherMain'>{{ currentWeatherData.weatherMain }}</span> - group of weather parameters (Rain, Snow, Extreme etc.)</li>
+                    <li><span class="bold-text">{{ currentWeatherData.weatherDescription }}</span> - weather condition within the group</li>
+                    <li><span class="bold-text" id='weatherIcon'>{{ currentWeatherData.weatherIcon }}</span> - weather icon id</li>
                 </ul>
             </mat-card-content>
             <mat-card-actions>
@@ -33,11 +33,11 @@
             </mat-card-header>
             <mat-card-content>
                 <ul>
-                    <li><span class="bold-text">{{ currentWeatgerData.mainTemp }}</span> - temperature in Celsius</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.mainHumidity }}</span> - humidity, %</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.mainPressure }}</span> - atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.mainTempMin }}</span> - minimum temperature at the moment. This is minimal currently observed temperature (within large megalopolises and urban areas)</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.mainTempMax }}</span> - maximum temperature at the moment. This is maximal currently observed temperature (within large megalopolises and urban areas)</li>
+                    <li><span class="bold-text" id='mainTemp'>{{ currentWeatherData.mainTemp }}</span> - temperature in Celsius</li>
+                    <li><span class="bold-text">{{ currentWeatherData.mainHumidity }}</span> - humidity, %</li>
+                    <li><span class="bold-text">{{ currentWeatherData.mainPressure }}</span> - atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa</li>
+                    <li><span class="bold-text">{{ currentWeatherData.mainTempMin }}</span> - minimum temperature at the moment. This is minimal currently observed temperature (within large megalopolises and urban areas)</li>
+                    <li><span class="bold-text">{{ currentWeatherData.mainTempMax }}</span> - maximum temperature at the moment. This is maximal currently observed temperature (within large megalopolises and urban areas)</li>
                     </ul>
             </mat-card-content>
             <mat-card-actions>
@@ -53,9 +53,9 @@
             </mat-card-header>
             <mat-card-content>
                 <ul>
-                    <li><span class="bold-text">{{ currentWeatgerData.windSpeed }}</span> - wind speed. Unit Default: meter/sec</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.windDeg }}</span> - wind direction, degrees (meteorological)</li>
-                    <li><span class="bold-text">{{ currentWeatgerData.windGust }}</span> -  wind gust. Unit Default: meter/sec</li>
+                    <li><span class="bold-text" id='windSpeed'>{{ currentWeatherData.windSpeed }}</span> - wind speed. Unit Default: meter/sec</li>
+                    <li><span class="bold-text">{{ currentWeatherData.windDeg }}</span> - wind direction, degrees (meteorological)</li>
+                    <li><span class="bold-text">{{ currentWeatherData.windGust }}</span> -  wind gust. Unit Default: meter/sec</li>
                 </ul>
             </mat-card-content>
             <mat-card-actions>

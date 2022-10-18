@@ -29,7 +29,7 @@ export class CurrentWeatherComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   stateAndCityName: string = '';
 
-  currentWeatgerData: CurrentWeatherInterface = { 
+  currentWeatherData: CurrentWeatherInterface = { 
     weatherMain: '', weatherDescription: '', weatherIcon: '',
     windDeg: 0, windGust: 0, windSpeed: 0,
     mainFeelsLike: 0, mainHumidity: 0, mainPressure: 0, mainTemp: 0, mainTempMax: 0, mainTempMin: 0,
@@ -57,14 +57,16 @@ export class CurrentWeatherComponent implements OnInit, OnChanges, OnDestroy {
         }
   
         this.currentWeatherSubscription = this.currentWeatherService.generateDataForCurrentWeather(this.apiKey, this.latitude, this.longtitude).subscribe(
-          (currentWeatgerData: CurrentWeatherInterface) => {
-            this.currentWeatgerData = currentWeatgerData;
+          (currentWeatherData: CurrentWeatherInterface | undefined) => {
+            if (currentWeatherData) {
+              this.currentWeatherData = currentWeatherData;
 
-            let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
-            this.backendLogMessageHandlerService.generateMessage('RECEIVED - current weather data : ' + timestampOfData);
+              let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
+              this.backendLogMessageHandlerService.generateMessageWithObservable('RECEIVED - current weather data : ' + timestampOfData);
+            }
         },
         (error: HttpErrorResponse) => {
-          this.backendLogMessageHandlerService.generateMessage('ERROR (current weather) - ' + error.error.message + ', ' + error.message + ', ' + 
+          this.backendLogMessageHandlerService.generateMessageWithObservable('ERROR (current weather) - ' + error.error.message + ', ' + error.message + ', ' + 
             error.status + ', ' + error.statusText + ', ' + error.url);
         });
       }
@@ -72,7 +74,9 @@ export class CurrentWeatherComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.currentWeatherSubscription.unsubscribe();
+    if (this.currentWeatherSubscription) {
+      this.currentWeatherSubscription.unsubscribe();
+    }
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { Observable, Subscription, of, map, filter } from 'rxjs';
+import { Observable, Subscription, of, map } from 'rxjs';
 
 import moment from 'moment';
 
@@ -44,27 +44,31 @@ export class SearchParametersComponent implements OnInit, OnDestroy {
     this.statesWithCities.set('mazowieckie', ['warszawa', 'radom', 'płock', 'legionowo']);
     this.statesWithCities.set('małopolskie', ['kraków', 'nowy sącz', 'wieliczka', 'bochnia', 'limanowa']);
   
-    this.backendLogMessageHandlerService.messageChangeEventEmitter.subscribe(
+    this.backendLogMessageHandlerService.getMessageAsObservable().subscribe(
       messageToLogin => this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + messageToLogin)
     );
   }
 
   ngOnDestroy(): void {
-    this.directGeocodingSubscription.unsubscribe();
+    if (this.directGeocodingSubscription) {
+      this.directGeocodingSubscription.unsubscribe();
+    }
   }
 
   setLatAndLong(apiKey: string, stateName: string, cityName: string): void {
     console.log('SearchParametersComponent : apiKey - ' + apiKey + ', stateName - ' + stateName + ', cityName - ' + cityName);
 
     this.directGeocodingSubscription = this.directGeocodingService.generateDataForDirectGeocoding(apiKey, stateName, cityName)
-      .subscribe((data: DirectGeocodingInterface) => {
-        this.backendData = data;
+      .subscribe((data: DirectGeocodingInterface | undefined) => {
+        if (data) {
+          this.backendData = data;
   
-        this.isCheckWeatherDisabled = false;
+          this.isCheckWeatherDisabled = false;
 
-        let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
+          let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
 
-        this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + 'RECEIVED - direct geocoding data : ' + timestampOfData);
+          this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + 'RECEIVED - direct geocoding data : ' + timestampOfData);
+        }
       },
       (error: HttpErrorResponse) => {
         this.logsFromBackendMessage = (this.logsFromBackendMessage + '\n' + 'ERROR (search parameters) - ' + error.error.message + ', ' + error.message + ', ' + 
