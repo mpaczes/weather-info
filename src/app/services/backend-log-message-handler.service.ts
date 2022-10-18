@@ -1,16 +1,21 @@
 import { DoCheck, EventEmitter, Injectable, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendLogMessageHandlerService {
-  @Output()
-  messageChangeEventEmitter: EventEmitter<string> = new EventEmitter();
+
+  private messageSubject = new Subject<string>();
 
   constructor() { }
 
-  generateMessage(message: string): void {
-    this.messageChangeEventEmitter.emit(message);
+  generateMessageWithObservable(message: string): void {
+    this.messageSubject.next(message);
   }
+
+  getMessageAsObservable(): Observable<string> {
+    return this.messageSubject.asObservable();
+  }
+
 }

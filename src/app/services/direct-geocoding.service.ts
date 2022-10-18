@@ -1,32 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
-
+import { catchError, defer, map, Observable, of, throwError } from 'rxjs';
+import { DirectGeocodingBackend } from '../models/direct-geocoding-backend';
 import { DirectGeocodingInterface } from '../models/direct-geocoding-interface';
-
-interface DirectGeocodingBackend {
-  name: string,
-  lat: number,
-  lon: number,
-  country: string,
-  state: string,
-  local_name: LocalNames
-}
-
-interface LocalNames {
-    eo: string,
-    sk: string,
-    uk: string,
-    lt: string,
-    ja: string,
-    pl: string,
-    he: string,
-    la: string,
-    be: string,
-    ru: string,
-    mk: string,
-    de: string
-}
 
 /**
  * This service handles direct geocoding with URL 'http://api.openweathermap.org/geo/1.0/direct?q={city},{state},{country}&limit=1&appid={api_key}'
@@ -42,7 +18,12 @@ export class DirectGeocodingService {
 
   constructor(private http: HttpClient) { }
 
-  generateDataForDirectGeocoding(apiKey: string, stateName: string, cityName: string): Observable<DirectGeocodingInterface> {
+  getDirectGeocodingUrl(apiKey: string, stateName: string, cityName: string) {
+    let url: string = this.directGeoCodingUrl;
+    return url.replace('<CITY>', cityName).replace('<STATE>', stateName).replace('<API_KEY>', apiKey);
+  }
+
+  generateDataForDirectGeocoding(apiKey: string, stateName: string, cityName: string): Observable<DirectGeocodingInterface | undefined> {
     let url: string = this.directGeoCodingUrl;
     url = url.replace('<CITY>', cityName).replace('<STATE>', stateName).replace('<API_KEY>', apiKey);
     
@@ -59,6 +40,13 @@ export class DirectGeocodingService {
         };
 
         return directGeocodingData;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          return of(undefined);
+        } else {
+          return throwError(error.error);
+        }
       })
     );
   }
@@ -95,4 +83,5 @@ export class DirectGeocodingService {
 
     return directGeocodingData;
   }
+  
 }

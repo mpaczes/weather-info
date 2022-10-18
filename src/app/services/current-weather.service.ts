@@ -1,46 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, retry } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { CurrentWeatherInterface } from '../models/current-weather-interface';
-
-interface CurrentWeatherBackendData {
-	visibility: number,
-	dt: number,
-	base: string,
-	timezone: number,
-	id: number,
-	name: string,
-	cod: number,
-	wind: Wind,
-	weather: Weather[],
-	main: Main
-
-}
-
-interface Wind {
-	speed: number,
-	deg: number,
-	gust: number
-}
-
-interface Weather {
-	id: number,
-	main: string,
-	description: string,
-	icon: string
-}
-
-interface Main {
-	temp: number,
-	feels_like: number,
-	temp_min: number,
-	temp_max: number,
-	pressure: number,
-	humidity: number
-}
+import { CurrentWeatherBackendData } from '../models/current-weather-backend-data';
 
 /**
  * This service handles current weather with URL https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
@@ -57,7 +22,12 @@ export class CurrentWeatherService {
 
 	constructor(private http: HttpClient) { }
 
-	generateDataForCurrentWeather(apiKey: string, lat: number, lon: number): Observable<CurrentWeatherInterface> {
+	getCurrentWeatherUrl(apiKey: string, lat: number, lon: number) {
+		let url: string = this.currentWeatherUrl;
+		return url.replace('<LAT>', lat + '').replace('<LON>', lon + '').replace('<API_KEY>', apiKey);
+	}
+
+	generateDataForCurrentWeather(apiKey: string, lat: number, lon: number): Observable<CurrentWeatherInterface | undefined> {
 		let url: string = this.currentWeatherUrl;
 		url = url.replace('<LAT>', lat + '').replace('<LON>', lon + '').replace('<API_KEY>', apiKey);
 		
@@ -83,11 +53,18 @@ export class CurrentWeatherService {
 					};
 	
 				return currentWeatgerData;
+			}),
+			catchError((error: HttpErrorResponse) => {
+				if (error.status === 404) {
+					return of(undefined);
+				} else {
+					return throwError(error.error);
+				}
 			}));
 	}
 
 	getStaticData(): CurrentWeatherInterface {
-	let backendData = {
+	let backendData: CurrentWeatherBackendData = {
 		coord: {
 			lon: 18.6057,
 			lat: 53.0153
@@ -100,7 +77,7 @@ export class CurrentWeatherService {
 				icon: "02n"
 			}
 		],
-		base: "stations",		// x
+		base: "stations",
 		main: {
 			temp: 9.95,
 			feels_like: 8.48,
@@ -109,7 +86,7 @@ export class CurrentWeatherService {
 			pressure: 1003,
 			humidity: 95
 		},
-		visibility: 10000,			// x
+		visibility: 10000,
 		wind: {
 			speed: 2.96,
 			deg: 258,
@@ -118,7 +95,7 @@ export class CurrentWeatherService {
 		clouds: {
 			all: 12
 		},
-		dt: 1663443562,				// x
+		dt: 1663443562,
 		sys: {
 			type: 2,
 			id: 2036314,
@@ -126,10 +103,10 @@ export class CurrentWeatherService {
 			sunrise: 1663388550,
 			sunset: 1663433881
 		},
-		timezone: 7200,		// x
-		id: 3083271,		// x
-		name: "Toruń",		// x
-		cod: 200			// x
+		timezone: 7200,
+		id: 3083271,
+		name: "Toruń",
+		cod: 200
 	}
 	
 	let currentWeatgerData: CurrentWeatherInterface  = {
