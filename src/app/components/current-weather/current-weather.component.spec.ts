@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { BackendLogMessageHandlerService } from 'src/app/services/backend-log-message-handler.service';
 import { CurrentWeatherService } from 'src/app/services/current-weather.service';
@@ -46,7 +46,7 @@ describe('CurrentWeatherComponent: unit test', () => {
     expect(component).toBeDefined();
   });
 
-  it('check current weather data values in the component after call ngOnChanges()', () => {
+  it('check current weather data values in the component after call ngOnChanges()', fakeAsync(() => {
     spyOn(currentWeatherService, 'generateDataForCurrentWeather').and.returnValue(of(currentWeatherService.getStaticData()));
   
     component.apiKey = '112233';
@@ -64,14 +64,15 @@ describe('CurrentWeatherComponent: unit test', () => {
     });
 
     fixture.detectChanges();
+    tick();
 
     expect(component.currentWeatherData.weatherMain).toBe('Clouds');
     expect(component.currentWeatherData.weatherIcon).toBe('02n');
     expect(component.currentWeatherData.mainTemp).toBe(9.95);
     expect(component.currentWeatherData.windSpeed).toBe(2.96);
-  });
+  }));
 
-  it('check values in the template after call ngOnChanges()', () => {
+  it('check values in the template after call ngOnChanges()', fakeAsync(() => {
     spyOn(currentWeatherService, 'generateDataForCurrentWeather').and.returnValue(of(currentWeatherService.getStaticData()));
   
     weatherMainDe = fixture.debugElement.query(By.css('#weatherMain'));
@@ -101,11 +102,12 @@ describe('CurrentWeatherComponent: unit test', () => {
     });
 
     fixture.detectChanges();
+    tick();
 
     expect(weatherMainEl.textContent).toContain('Clouds');
     expect(weatherIconEl.textContent).toContain('02n');
     expect(mainTempEl.textContent).toContain('9.95');
     expect(windSpeedEl.textContent).toContain('2.96');
-  });
+  }));
 
 });

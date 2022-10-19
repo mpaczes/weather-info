@@ -52,8 +52,8 @@ describe('WeatherForecastComponent', () => {
       stateAndCityName: new SimpleChange(null, component.stateAndCityName, true)
     });
 
-    tick(1000);
     fixture.detectChanges();
+    tick();
 
     expect(component.displayedColumns.length).toBe(0);
     expect(component.headerNames.size).toBe(0);
@@ -77,8 +77,8 @@ describe('WeatherForecastComponent', () => {
       stateAndCityName: new SimpleChange(null, component.stateAndCityName, true)
     });
 
-    tick(1000);
     fixture.detectChanges();
+    tick();
 
     expect(component.displayedColumns.length).toBe(13);
     expect(component.headerNames.size).toBe(13);
