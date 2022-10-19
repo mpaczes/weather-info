@@ -18,28 +18,18 @@ export class DirectGeocodingService {
 
   constructor(private http: HttpClient) { }
 
-  getDirectGeocodingUrl(apiKey: string, stateName: string, cityName: string) {
+  getDirectGeocodingUrl(apiKey: string, stateName: string, cityName: string): string {
     let url: string = this.directGeoCodingUrl;
     return url.replace('<CITY>', cityName).replace('<STATE>', stateName).replace('<API_KEY>', apiKey);
   }
 
   generateDataForDirectGeocoding(apiKey: string, stateName: string, cityName: string): Observable<DirectGeocodingInterface | undefined> {
-    let url: string = this.directGeoCodingUrl;
-    url = url.replace('<CITY>', cityName).replace('<STATE>', stateName).replace('<API_KEY>', apiKey);
-    
+    let url: string = this.getDirectGeocodingUrl(apiKey, stateName, cityName);
+
     return this.http.get(url).pipe(
       map(backendData => {
         let dataFromBackend: DirectGeocodingBackend[] = (<DirectGeocodingBackend[]> backendData);
-
-        let directGeocodingData: DirectGeocodingInterface = {
-          latitude: dataFromBackend[0].lat,
-          longtitude:dataFromBackend[0].lon,
-          name: dataFromBackend[0].name,
-          state: dataFromBackend[0].state,
-          country: dataFromBackend[0].country
-        };
-
-        return directGeocodingData;
+        return this.prepareDirectGeocodingData(dataFromBackend);
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
@@ -49,6 +39,18 @@ export class DirectGeocodingService {
         }
       })
     );
+  }
+
+  prepareDirectGeocodingData(dataFromBackend: DirectGeocodingBackend[]): DirectGeocodingInterface {
+    let directGeocodingData: DirectGeocodingInterface = {
+      latitude: dataFromBackend[0].lat,
+      longtitude:dataFromBackend[0].lon,
+      name: dataFromBackend[0].name,
+      state: dataFromBackend[0].state,
+      country: dataFromBackend[0].country
+    };
+
+    return directGeocodingData;
   }
 
   getStaticData(): DirectGeocodingInterface {

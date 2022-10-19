@@ -30,7 +30,6 @@ export class WeatherForecastService {
     return this.httpClient.get(url).pipe(
       map(backendData => {
         let dataToParse: WeatherForecastBackendData = (<WeatherForecastBackendData> backendData);
-
         return this.prepareWeatherForecastData(dataToParse);
       }),
       catchError((error: HttpErrorResponse) => {

@@ -4,8 +4,8 @@ import { catchError, map } from 'rxjs/operators';
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { CurrentWeatherInterface } from '../models/current-weather-interface';
 import { CurrentWeatherBackendData } from '../models/current-weather-backend-data';
+import { CurrentWeatherInterface } from '../models/current-weather-interface';
 
 /**
  * This service handles current weather with URL https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
@@ -35,24 +35,7 @@ export class CurrentWeatherService {
 			.pipe(
 				map(backendData => {
 					let dataFromBackend: CurrentWeatherBackendData = (<CurrentWeatherBackendData> backendData);
-	
-					let currentWeatgerData: CurrentWeatherInterface  = {
-						weatherMain: dataFromBackend.weather[0].main,
-						weatherDescription: dataFromBackend.weather[0].description,
-						weatherIcon: dataFromBackend.weather[0].icon,
-						mainTemp: dataFromBackend.main.temp,
-						mainTempMin: dataFromBackend.main.temp_min,
-						mainTempMax: dataFromBackend.main.temp_max,
-						mainFeelsLike: dataFromBackend.main.feels_like,
-						mainPressure: dataFromBackend.main.pressure,
-						mainHumidity: dataFromBackend.main.humidity,
-						windSpeed: dataFromBackend.wind.speed,
-						windDeg: dataFromBackend.wind.deg,
-						windGust: dataFromBackend.wind.gust,
-						dt: dataFromBackend.dt
-					};
-	
-				return currentWeatgerData;
+					return this.prepareWeatherData(dataFromBackend);
 			}),
 			catchError((error: HttpErrorResponse) => {
 				if (error.status === 404) {
@@ -63,68 +46,88 @@ export class CurrentWeatherService {
 			}));
 	}
 
-	getStaticData(): CurrentWeatherInterface {
-	let backendData: CurrentWeatherBackendData = {
-		coord: {
-			lon: 18.6057,
-			lat: 53.0153
-		},
-		weather: [
-			{
-				id: 801,
-				main: "Clouds",
-				description: "few clouds",
-				icon: "02n"
-			}
-		],
-		base: "stations",
-		main: {
-			temp: 9.95,
-			feels_like: 8.48,
-			temp_min: 9.49,
-			temp_max: 12.59,
-			pressure: 1003,
-			humidity: 95
-		},
-		visibility: 10000,
-		wind: {
-			speed: 2.96,
-			deg: 258,
-			gust: 9.07
-		},
-		clouds: {
-			all: 12
-		},
-		dt: 1663443562,
-		sys: {
-			type: 2,
-			id: 2036314,
-			country: "PL",
-			sunrise: 1663388550,
-			sunset: 1663433881
-		},
-		timezone: 7200,
-		id: 3083271,
-		name: "Toruń",
-		cod: 200
-	}
-	
-	let currentWeatgerData: CurrentWeatherInterface  = {
-		weatherMain: backendData.weather[0].main,
-		weatherDescription: backendData.weather[0].description,
-		weatherIcon: backendData.weather[0].icon,
-		mainTemp: backendData.main.temp,
-		mainFeelsLike: backendData.main.feels_like,
-		mainHumidity: backendData.main.humidity,
-		mainPressure: backendData.main.pressure,
-		mainTempMin: backendData.main.temp_min,
-		mainTempMax: backendData.main.temp_max,
-		windSpeed: backendData.wind.speed,
-		windDeg: backendData.wind.deg,
-		windGust: backendData.wind.gust,
-		dt: backendData.dt
+	prepareWeatherData(dataFromBackend: CurrentWeatherBackendData): CurrentWeatherInterface {
+		let currentWeatherData: CurrentWeatherInterface  = {
+			weatherMain: dataFromBackend.weather[0].main,
+			weatherDescription: dataFromBackend.weather[0].description,
+			weatherIcon: dataFromBackend.weather[0].icon,
+			mainTemp: dataFromBackend.main.temp,
+			mainTempMin: dataFromBackend.main.temp_min,
+			mainTempMax: dataFromBackend.main.temp_max,
+			mainFeelsLike: dataFromBackend.main.feels_like,
+			mainPressure: dataFromBackend.main.pressure,
+			mainHumidity: dataFromBackend.main.humidity,
+			windSpeed: dataFromBackend.wind.speed,
+			windDeg: dataFromBackend.wind.deg,
+			windGust: dataFromBackend.wind.gust,
+			dt: dataFromBackend.dt
 		};
-	
-	return currentWeatgerData;
+
+		return currentWeatherData;
+	}
+
+	getStaticData(): CurrentWeatherInterface {
+		let backendData: CurrentWeatherBackendData = {
+			coord: {
+				lon: 18.6057,
+				lat: 53.0153
+			},
+			weather: [
+				{
+					id: 801,
+					main: "Clouds",
+					description: "few clouds",
+					icon: "02n"
+				}
+			],
+			base: "stations",
+			main: {
+				temp: 9.95,
+				feels_like: 8.48,
+				temp_min: 9.49,
+				temp_max: 12.59,
+				pressure: 1003,
+				humidity: 95
+			},
+			visibility: 10000,
+			wind: {
+				speed: 2.96,
+				deg: 258,
+				gust: 9.07
+			},
+			clouds: {
+				all: 12
+			},
+			dt: 1663443562,
+			sys: {
+				type: 2,
+				id: 2036314,
+				country: "PL",
+				sunrise: 1663388550,
+				sunset: 1663433881
+			},
+			timezone: 7200,
+			id: 3083271,
+			name: "Toruń",
+			cod: 200
+		}
+		
+		let currentWeatgerData: CurrentWeatherInterface  = {
+			weatherMain: backendData.weather[0].main,
+			weatherDescription: backendData.weather[0].description,
+			weatherIcon: backendData.weather[0].icon,
+			mainTemp: backendData.main.temp,
+			mainFeelsLike: backendData.main.feels_like,
+			mainHumidity: backendData.main.humidity,
+			mainPressure: backendData.main.pressure,
+			mainTempMin: backendData.main.temp_min,
+			mainTempMax: backendData.main.temp_max,
+			windSpeed: backendData.wind.speed,
+			windDeg: backendData.wind.deg,
+			windGust: backendData.wind.gust,
+			dt: backendData.dt
+			};
+		
+		return currentWeatgerData;
 	}
 }
