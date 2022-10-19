@@ -16,8 +16,6 @@ export class AppComponent {
   stateAndCityName: string = '';
 
   backendDataReceiver(event: EventEmitterInterface, tabs: MatTabGroup) {
-    console.log(event);
-
     this.apiKey = event.apiKey;
     this.latitude = event.latitude;
     this.longtitude = event.longtitude
