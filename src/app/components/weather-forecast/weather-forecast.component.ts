@@ -67,19 +67,19 @@ export class WeatherForecastComponent implements OnInit, OnChanges, OnDestroy, A
         }
   
         this.forecastSubscription = this.weatherForecastService.getWeatherForecastData(this.apiKey, this.latitude, this.longtitude).subscribe(
-          (weatherForecast: WeatherForecastInterface) => { 
-            this.weatherForecast = weatherForecast;
+          (weatherForecast: WeatherForecastInterface | undefined) => {
+            if (weatherForecast) {
+              this.weatherForecast = weatherForecast;
 
-            this.prepareHeadersForTable();
-            this.prepareDataForTable();
-    
-            console.log(this.weatherForecast);
+              this.prepareHeadersForTable();
+              this.prepareDataForTable();
 
-            let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
-            this.backendLogMessageHandlerService.generateMessage('RECEIVED - weather forecast data : ' + timestampOfData);
+              let timestampOfData: string = moment().format('DD MMMM YYYY - HH:mm:ss');
+              this.backendLogMessageHandlerService.generateMessageWithObservable('RECEIVED - weather forecast data : ' + timestampOfData);
+            }
           },
           (error: HttpErrorResponse) => {
-            this.backendLogMessageHandlerService.generateMessage('ERROR (weather forecast) - ' + error.error.message + ', ' + error.message + ', ' + 
+            this.backendLogMessageHandlerService.generateMessageWithObservable('ERROR (weather forecast) - ' + error.error.message + ', ' + error.message + ', ' + 
               error.status + ', ' + error.statusText + ', ' + error.url);
           });
       }
@@ -87,7 +87,9 @@ export class WeatherForecastComponent implements OnInit, OnChanges, OnDestroy, A
   }
 
   ngOnDestroy(): void {
-    this.forecastSubscription.unsubscribe();
+    if (this.forecastSubscription) {
+      this.forecastSubscription.unsubscribe();
+    }
   }
 
   prepareHeadersForTable() {
